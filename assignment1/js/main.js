@@ -28,6 +28,7 @@ window.onload = function() {
     var numberOfLives;
     var numberOfLivesText
     var gameOverText;
+    var moveDownThisX; //have the rock move down this X lane
 
     function create() {
         // Create a sprite at the center of the screen using the 'logo' image.
@@ -46,13 +47,14 @@ window.onload = function() {
 
         //hiding the game over text by displaying it off the screen, only solution i could think of
 
+
         background = game.add.image(60, 0, 'background');
         background.scale.x = 0.8;
 
         numberOfLives = 3;
 
         var style = { font: "25px Verdana", fill: "#9999ff", align: "center" };
-        var text = game.add.text( game.world.centerX, 15, "Build something amazing.", style );
+        var text = game.add.text( game.world.centerX, 15, "Dodge that car!.", style );
         numberOfLivesText = game.add.text( game.world.centerX + 300, 15, numberOfLives, style );
         numberOfLivesText.setText("Lives: " + numberOfLives);
 
@@ -63,10 +65,14 @@ window.onload = function() {
         carSprite.anchor.setTo(0.5, 1);
         carSprite.scale.setTo(0.06, 0.06);
 
-        rockSprite = game.add.sprite(game.rnd.integerInRange(171, 570), 0, 'rock');
+        moveDownThisX = game.rnd.integerInRange(171, 570);
+        rockSprite = game.add.sprite(moveDownThisX, 0, 'rock');
         //rockSprite.scale.setTo(2, 2);
         game.physics.enable( rockSprite, Phaser.Physics.ARCADE );
         rockSprite.anchor.setTo(0, 0);
+
+        gameOverText = game.add.text( game.world.centerX, game.world.centerY, "GAME OVER", style );
+        gameOverText.visible = false;
     }
 
     function update() {
@@ -80,10 +86,13 @@ window.onload = function() {
         {
           game.debug.inputInfo(32, 32);
           keepCarInBounds();
-
-          game.physics.arcade.collide(carSprite, rockSprite, decrementScore);
-
-          game.physics.arcade.moveToXY(rockSprite, 307, 600, 200);
+          rockStatus();
+        }
+        else
+        {
+            gameOverText.visible = true;
+            rockSprite.kill();
+            carSprite.kill();
         }
     }
 
@@ -116,9 +125,22 @@ window.onload = function() {
 
     function spawnRock()
     {
-      rockSprite = game.add.sprite(game.rnd.integerInRange(171, 570), 0, 'rock');
+      moveDownThisX = game.rnd.integerInRange(171, 570);
+      rockSprite = game.add.sprite(moveDownThisX, 0, 'rock');
       game.physics.enable( rockSprite, Phaser.Physics.ARCADE );
       rockSprite.anchor.setTo(0, 0);
     }
 
+    function rockStatus()
+    {
+      game.physics.arcade.collide(carSprite, rockSprite, decrementScore);
+
+      if(rockSprite.y > 600)
+      {
+        rockSprite.kill();
+        spawnRock();
+      }
+
+      game.physics.arcade.moveToXY(rockSprite, moveDownThisX, 800, 200);
+    }
 };
