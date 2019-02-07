@@ -27,8 +27,8 @@ window.onload = function() {
     var rockSprite;
     var numberOfLives;
     var numberOfLivesText
-    //var score;
-    //var scoreCountText;
+    var score;
+    var scoreCountText;
     var gameOverText;
     var moveDownThisX; //have the rock move down this X lane
 
@@ -54,11 +54,14 @@ window.onload = function() {
         background.scale.x = 0.8;
 
         numberOfLives = 3;
+        score = 0;
 
         var style = { font: "25px Verdana", fill: "#9999ff", align: "center" };
         var text = game.add.text( game.world.centerX, 15, "Dodge that rock!.", style );
         numberOfLivesText = game.add.text( game.world.centerX + 300, 15, numberOfLives, style );
         numberOfLivesText.setText("Lives: " + numberOfLives);
+        scoreCountText = game.add.text( game.world.centerX + 280, 50, score, style );
+        scoreCountText.setText("Score: " + score);
 
         text.anchor.setTo( 0.5, 0.0 );
 
@@ -125,12 +128,12 @@ window.onload = function() {
 
       numberOfLivesText.setText("Lives: " + numberOfLives);
     }
-/*
+
     function incrementScore()
     {
       score++;
       scoreCountText.setText("Score: " + score);
-    }*/
+    }
 
     function spawnRock()
     {
@@ -147,7 +150,7 @@ window.onload = function() {
       if(rockSprite.y > 600)
       {
         rockSprite.kill();
-        //incrementScore(); //increment score as soon as rock passes player
+        incrementScore(); //increment score as soon as rock passes player
         spawnRock();
       }
 
