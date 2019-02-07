@@ -27,6 +27,8 @@ window.onload = function() {
     var rockSprite;
     var numberOfLives;
     var numberOfLivesText
+    var score;
+    var scoreCountText;
     var gameOverText;
     var moveDownThisX; //have the rock move down this X lane
 
@@ -54,8 +56,10 @@ window.onload = function() {
         numberOfLives = 3;
 
         var style = { font: "25px Verdana", fill: "#9999ff", align: "center" };
-        var text = game.add.text( game.world.centerX, 15, "Dodge that car!.", style );
+        var text = game.add.text( game.world.centerX, 15, "Dodge that rock!.", style );
         numberOfLivesText = game.add.text( game.world.centerX + 300, 15, numberOfLives, style );
+        scoreCountText = game.add.text( game.world.centerX + 300, 40, score, style );
+        scoreCountText.setText("Score: " + score);
         numberOfLivesText.setText("Lives: " + numberOfLives);
 
         text.anchor.setTo( 0.5, 0.0 );
@@ -72,6 +76,7 @@ window.onload = function() {
         rockSprite.anchor.setTo(0, 0);
 
         gameOverText = game.add.text( game.world.centerX, game.world.centerY, "GAME OVER", style );
+
         gameOverText.visible = false;
     }
 
@@ -114,13 +119,19 @@ window.onload = function() {
 
     //this function I got from this example https://phaser.io/examples/v2/text/update-text
 
-    function decrementScore()
+    function decrementLives()
     {
       rockSprite.kill();
       spawnRock();
       numberOfLives--;
 
-      numberOfLivesText.setText("Lives: " + numberOfLives);
+      numberOfLivesText.setText("Lddives: " + numberOfLives);
+    }
+
+    function incrementScore()
+    {
+      score++;
+      scoreCountText.setText("Score: " + score);
     }
 
     function spawnRock()
@@ -133,11 +144,12 @@ window.onload = function() {
 
     function rockStatus()
     {
-      game.physics.arcade.collide(carSprite, rockSprite, decrementScore);
+      game.physics.arcade.collide(carSprite, rockSprite, decrementLives);
 
       if(rockSprite.y > 600)
       {
         rockSprite.kill();
+        incrementScore(); //increment score as soon as rock passes player
         spawnRock();
       }
 
