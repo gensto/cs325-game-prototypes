@@ -137,6 +137,9 @@ window.onload = function() {
         obstacle2.body.immovable = true;
         obstacle3.body.immovable = true;
 
+        obstacle2.angle = -34;
+        obstacle3.angle = 34;
+
 
         // Anchor the sprite at its center, as opposed to its top-left corner.
         // so it will be truly centered.
@@ -414,9 +417,9 @@ window.onload = function() {
 
     function rotateObstacles()
     {
-        //obstacle1.angle += 2;
-        //obstacle2.angle += 2;
-        //obstacle3.angle += 2;
+        obstacle1.angle += 2;
+        obstacle2.angle += 2;
+        obstacle3.angle += 2;
     }
 
     function playerSpree()
