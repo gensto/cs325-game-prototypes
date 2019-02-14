@@ -117,7 +117,7 @@ window.onload = function() {
         player2 = game.add.sprite( game.world.centerX, 550, 'player2' );
 
         obstacle1 = game.add.sprite( game.world.centerX, game.world.centerY, 'obstacle1' );
-        obstacle2 = game.add.sprite( game.world.centerX + 450, game.world.centerY, 'obstacle2' );
+        obstacle2 = game.add.sprite( game.world.centerX + 650, game.world.centerY, 'obstacle2' );
         obstacle3 = game.add.sprite( game.world.centerX - 300, game.world.centerY, 'obstacle3' );
 
         obstacle1.anchor.setTo( 0.5, 0.5 );
