@@ -31,6 +31,7 @@ window.onload = function() {
         game.load.audio('fiveInARow', 'assets/sound/fiveInARow.mp3');
         game.load.audio('tenInARow', 'assets/sound/tenInARow.mp3');
         game.load.audio('scoreOnSelf', 'assets/sound/scoreOnSelf.mp3');
+        game.load.audio('impressive', 'assets/sound/impressive.mp3');
     }
 
     var firstScore;
@@ -39,6 +40,7 @@ window.onload = function() {
     var fiveInARow;
     var tenInARow;
     var scoreOnSelf;
+    var impressive;
 
     var player1Spree = 0;
     var player2Spree = 0;
@@ -94,6 +96,8 @@ window.onload = function() {
         tenInARow.volume = 0.3;
         scoreOnSelf = game.add.audio('scoreOnSelf');
         scoreOnSelf.volume = 0.3;
+        impressive = game.add.audio('impressive');
+        impressive.volume = 0.3;
 
         hitsound = game.add.audio('hitsound');
         hitsound.volume = 0.3;
@@ -180,6 +184,8 @@ window.onload = function() {
         game.time.events.add(Phaser.Timer.SECOND * 3, spawnBall, this);
     }
 
+    var impressivePlayed = false;
+
     function update() {
 
         // Accelerate the 'logo' sprite towards the cursor,
@@ -188,11 +194,32 @@ window.onload = function() {
         // This function returns the rotation angle that makes it visually match its
         // new trajectory.
         //bouncy.rotation = game.physics.arcade.accelerateToPointer( bouncy, game.input.activePointer, 500, 500, 500 );
-        ballOnSpriteCollision();
-        ballOnObstacle();
-        rotateObstacles();
-        updateMovement();
-        detectScore();
+        if(player1Score == 20 || player2Score == 20)
+        {
+          if(!impressivePlayed)
+          {
+            impressivePlayed = true;
+            impressive.play();
+          }
+          var gameOver;
+          var style = { font: "25px Verdana", fill: "#9999ff", align: "center" };
+          if(player1Score == 20)
+          {
+            gameOver = game.add.text(game.world.centerX, game.world.centerY + 30, "Player 1 wins!", style);
+          }
+          else
+          {
+            gameOver = game.add.text(game.world.centerX, game.world.centerY + 30, "Player 2 wins!", style);
+          }
+        }
+        else
+        {
+          ballOnSpriteCollision();
+          ballOnObstacle();
+          rotateObstacles();
+          updateMovement();
+          detectScore();
+        }
 
         console.log(player1.angle);
     }
