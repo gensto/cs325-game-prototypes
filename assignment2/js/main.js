@@ -20,12 +20,37 @@ window.onload = function() {
         game.load.image('player1goal', 'assets/sprites/goal.png');
         game.load.image('player2goal', 'assets/sprites/goal.png');
         game.load.image('ball', 'assets/sprites/ball.png');
+        game.load.image('obstacle1', 'assets/sprites/obstacle1.png');
+        game.load.image('obstacle2', 'assets/sprites/obstacle2.png');
+        game.load.image('obstacle3', 'assets/sprites/obstacle3.png');
 
         game.load.audio('hitsound', 'assets/sound/hitsound.mp3');
+        game.load.audio('firstScore', 'assets/sound/firstscore.mp3');
+        game.load.audio('twoInARow', 'assets/sound/twoInARow.mp3');
+        game.load.audio('threeInARow', 'assets/sound/threeInARow.mp3');
+        game.load.audio('fiveInARow', 'assets/sound/fiveInARow.mp3');
+        game.load.audio('tenInARow', 'assets/sound/tenInARow.mp3');
+        game.load.audio('scoreOnSelf', 'assets/sound/scoreOnSelf.mp3');
     }
+
+    var firstScore;
+    var twoInARow;
+    var threeInARow;
+    var fiveInARow;
+    var tenInARow;
+    var scoreOnSelf;
+
+    var player1Spree = 0;
+    var player2Spree = 0;
 
     var player1;
     var player2;
+
+    var obstacle1;
+    var obstacle2;
+    var obstacle3;
+
+    var totalScore = 0;
 
     var ball;
 
@@ -49,8 +74,26 @@ window.onload = function() {
 
     var timerOn;
 
+    var hitLast;
+
+    var player1SpreeText;
+    var player2SpreeText;
+
 
     function create() {
+
+        firstScore = game.add.audio('firstScore');
+        firstScore.volume = 0.3;
+        twoInARow = game.add.audio('twoInARow');
+        twoInARow.volume = 0.3;
+        threeInARow = game.add.audio('threeInARow');
+        threeInARow.volume = 0.3;
+        fiveInARow = game.add.audio('fiveInARow');
+        fiveInARow.volume = 0.3;
+        tenInARow = game.add.audio('tenInARow');
+        tenInARow.volume = 0.3;
+        scoreOnSelf = game.add.audio('scoreOnSelf');
+        scoreOnSelf.volume = 0.3;
 
         hitsound = game.add.audio('hitsound');
         hitsound.volume = 0.3;
@@ -68,6 +111,27 @@ window.onload = function() {
         // Create a sprite at the center of the screen using the 'logo' image.
         player1 = game.add.sprite( game.world.centerX, 50, 'player1' );
         player2 = game.add.sprite( game.world.centerX, 550, 'player2' );
+
+        obstacle1 = game.add.sprite( game.world.centerX, game.world.centerY, 'obstacle1' );
+        obstacle2 = game.add.sprite( game.world.centerX + 300, game.world.centerY, 'obstacle2' );
+        obstacle3 = game.add.sprite( game.world.centerX - 300, game.world.centerY, 'obstacle3' );
+
+        obstacle1.anchor.setTo( 0.5, 0.5 );
+        obstacle2.anchor.setTo( 0.5, 0.5 );
+        obstacle3.anchor.setTo( 0.5, 0.5 );
+
+        game.physics.enable( obstacle1, Phaser.Physics.ARCADE );
+        game.physics.enable( obstacle2, Phaser.Physics.ARCADE );
+        game.physics.enable( obstacle3, Phaser.Physics.ARCADE );
+        // Make it bounce off of the world bounds.
+
+        obstacle1.body.collideWorldBounds = true;
+        obstacle2.body.collideWorldBounds = true;
+        obstacle3.body.collideWorldBounds = true;
+
+        obstacle1.body.immovable = true;
+        obstacle2.body.immovable = true;
+        obstacle3.body.immovable = true;
 
 
         // Anchor the sprite at its center, as opposed to its top-left corner.
@@ -89,6 +153,12 @@ window.onload = function() {
         // Add some text using a CSS style.
         // Center it in X, and position its top 15 pixels from the top of the world.
         var style = { font: "25px Verdana", fill: "#9999ff", align: "center" };
+        var style2 = { font: "16px Verdana", fill: "#9999ff", align: "center" };
+
+        player1SpreeText = game.add.text(760, 50, "Spree: " + player1Spree, style2);
+        player1SpreeText.anchor.setTo(0.5, 0.5);
+        player2SpreeText = game.add.text(760, 550, "Spree: " + player2Spree, style2);
+        player2SpreeText.anchor.setTo(0.5, 0.5);
 
         score1 = game.add.text(760, 20, player1Score, style);
         score1.anchor.setTo(0.5, 0.5);
@@ -119,22 +189,23 @@ window.onload = function() {
         // new trajectory.
         //bouncy.rotation = game.physics.arcade.accelerateToPointer( bouncy, game.input.activePointer, 500, 500, 500 );
         ballOnSpriteCollision();
+        ballOnObstacle();
+        rotateObstacles();
         updateMovement();
         detectScore();
-
 
         console.log(player1.angle);
     }
 
     function countDownToSpawn()
     {
-      game.time.events.add(Phaser.Timer.SECOND * 3, spawnBall, this);
+      game.time.events.add(Phaser.Timer.SECOND * 2, spawnBall, this);
     }
 
     function spawnBall()
     {
       ball.kill();
-      ball = game.add.sprite( 200, game.world.centerY, 'ball' );
+      ball = game.add.sprite( 50, 50, 'ball' );
       game.physics.enable( ball, Phaser.Physics.ARCADE );
       ball.body.collideWorldBounds = true;
 
@@ -151,15 +222,55 @@ window.onload = function() {
 
       if(ball.y <= 15)
       {
-        player1Score++;
+
+                //
+        totalScore++;
+        player2Score++;
+        player2Spree++;
+        player1Spree = 0;
+        score2.setText(player2Score);
+        player2SpreeText.setText("Spree: " + player2Spree);
         score1.setText(player1Score);
-        spawnBall();
+        player1SpreeText.setText("Spree: " + player1Spree);
+
+      if(totalScore == 1)
+      {
+        firstScore.play();
+      }
+
+      playerSpree();
+
+      if(hitLast == 1)
+      {
+        scoreOnSelf.play();
+      }
+
+      spawnBall();
       }
       if(ball.y >= 585)
       {
-        console.log("goal detected lol");
-        player2Score++;
+        totalScore++;
+        player1Score++;
+        player1Spree++;
+        player2Spree = 0;
+        score1.setText(player1Score);
+        player1SpreeText.setText("Spree: " + player1Spree);
         score2.setText(player2Score);
+        player2SpreeText.setText("Spree: " + player2Spree);
+
+        if(totalScore == 1)
+        {
+          firstScore.play();
+        }
+
+        playerSpree();
+
+        if(hitLast == 2)
+        {
+          scoreOnSelf.play();
+        }
+
+
         spawnBall();
       }
     }
@@ -168,11 +279,11 @@ window.onload = function() {
     {
       if(player1left.isDown)
       {
-        player1.x -= 7;
+        player1.x -= 8;
       }
       if(player1right.isDown)
       {
-        player1.x += 7;
+        player1.x += 8;
       }
       if(player1rotateLeft.isDown && player1.angle > -60)
       {
@@ -186,11 +297,11 @@ window.onload = function() {
 
       if(player2left.isDown)
       {
-        player2.x -= 7;
+        player2.x -= 8;
       }
       if(player2right.isDown)
       {
-        player2.x += 7;
+        player2.x += 8;
       }
       if(player2rotateLeft.isDown && player2.angle > -60)
       {
@@ -219,6 +330,7 @@ window.onload = function() {
         }
 
         ball.body.velocity.y = Math.abs(ball.body.velocity.y);
+        hitLast = 1;
       }
       if(game.physics.arcade.collide(player2, ball))
       {
@@ -234,6 +346,69 @@ window.onload = function() {
         }
 
         ball.body.velocity.y = Math.abs(ball.body.velocity.y)*-1;
+        hitLast = 2;
+      }
+    }
+
+    function ballOnObstacle()
+    {
+
+      if(hitLast == 2 && (game.physics.arcade.collide(obstacle1, ball) || game.physics.arcade.collide(obstacle2, ball) || game.physics.arcade.collide(obstacle3, ball)))
+      {
+        hitsound.play();
+
+        if(obstacle1.angle > 0)
+        {
+          ball.body.velocity.x = Math.abs(ball.body.velocity.x)*-1;
+        }
+        if(obstacle1.angle < 0)
+        {
+          ball.body.velocity.x = Math.abs(ball.body.velocity.x);
+        }
+
+        ball.body.velocity.y = Math.abs(ball.body.velocity.y);
+      }
+      if(hitLast == 1 && (game.physics.arcade.collide(obstacle1, ball) || game.physics.arcade.collide(obstacle2, ball) || game.physics.arcade.collide(obstacle3, ball)))
+      {
+        hitsound.play();
+
+        if(obstacle1.angle > 0)
+        {
+          ball.body.velocity.x = Math.abs(ball.body.velocity.x);
+        }
+        if(obstacle1.angle < 0)
+        {
+          ball.body.velocity.x = Math.abs(ball.body.velocity.x)*-1;
+        }
+
+        ball.body.velocity.y = Math.abs(ball.body.velocity.y)*-1;
+      }
+    }
+
+    function rotateObstacles()
+    {
+        //obstacle1.angle += 2;
+        //obstacle2.angle += 2;
+        //obstacle3.angle += 2;
+    }
+
+    function playerSpree()
+    {
+      if(player1Spree == 2 || player2Spree == 2)
+      {
+        twoInARow.play();
+      }
+      if(player1Spree == 3 || player2Spree == 3)
+      {
+        threeInARow.play();
+      }
+      if(player1Spree == 5 || player2Spree == 5)
+      {
+        fiveInARow.play();
+      }
+      if(player1Spree == 10 || player2Spree == 10)
+      {
+        tenInARow.play();
       }
     }
 };
