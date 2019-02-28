@@ -49,24 +49,26 @@ BasicGame.Preloader.prototype = {
 				this.load.image('mathclass', 'assets/maps/mathclassroom.png');
 				this.load.image('gameclass', 'assets/maps/gameclassroom.png');
 
-				this.load.image('diploma', 'assets/sprites/diploma.png')
+				this.load.image('diploma', 'assets/sprites/diploma.png');
 
 				//math questions
 				this.load.image('question1', 'assets/sprites/MathQuestions/question1.png');
 				this.load.image('question2', 'assets/sprites/MathQuestions/question2.png');
 				this.load.image('question3', 'assets/sprites/MathQuestions/question3.png');
 
+				this.game.load.audio('powerupSound', 'assets/sounds/powerupSound.mp3');
 				this.game.load.audio('hooray', 'assets/sounds/hooray.mp3');
 				this.game.load.audio('controlsmusic', 'assets/sounds/controlsmusic.mp3');
-				this.game.load.audio('fireballsound', 'assets/sounds/fireballsound.mp3')
-				this.game.load.audio('burned', 'assets/sounds/burned.mp3')
-				this.game.load.audio('oof', 'assets/sounds/oof.mp3')
+				this.game.load.audio('fireballsound', 'assets/sounds/fireballsound.mp3');
+				this.game.load.audio('burned', 'assets/sounds/burned.mp3');
+				this.game.load.audio('oof', 'assets/sounds/oof.mp3');
 				this.load.image('controls', 'assets/sprites/controls.png');
 
 				//sprites
 				this.load.image('door', 'assets/sprites/door.png');
 
 		  	this.load.spritesheet('character', 'assets/sprites/character.png', 101, 128, 16);
+				this.load.spritesheet('dragon', 'assets/sprites/dragon.png', 193, 157, 12);
 	},
 
 	create: function () {

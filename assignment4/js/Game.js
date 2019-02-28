@@ -47,6 +47,7 @@ BasicGame.Game = function (game) {
     var fireballSound;
     var burnedSound;
     var oofSound;
+    var powerupSound;
 
     var tipText;
 
@@ -54,6 +55,9 @@ BasicGame.Game = function (game) {
     var powerups;
 
     var respawnPowerupTime;
+
+    var dragon;
+
 
 BasicGame.Game.prototype = {
 
@@ -63,6 +67,7 @@ BasicGame.Game.prototype = {
 
         // Create a sprite at the center of the screen using the 'logo' image.
         //this.bouncy = this.game.add.sprite( this.game.world.centerX, this.game.world.centerY, 'logo' );
+
         this.fireBall = null;
         this.shootTime = 0;
         this.respawnBookTime = 0;
@@ -108,6 +113,7 @@ BasicGame.Game.prototype = {
         this.fireballSound = this.game.add.audio('fireballsound');
         this.burnedSound = this.game.add.audio('burned');
         this.oofSound = this.game.add.audio('oof');
+        this.powerupSound = this.game.add.audio('powerupSound');
         // Anchor the sprite at its center, as opposed to its top-left corner.
         // so it will be truly centered.
 
@@ -183,6 +189,7 @@ BasicGame.Game.prototype = {
     powerupHitsPlayer: function(powerup, skyChar){
       skyChar.kill();
 
+      this.powerupSound.play();
 
       this.lifeCount += 1;
 
