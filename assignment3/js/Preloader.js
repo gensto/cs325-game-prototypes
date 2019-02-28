@@ -38,6 +38,7 @@ BasicGame.Preloader.prototype = {
 
 		this.load.image('skychar', 'assets/sprites/skychar.png');
 		this.load.image('fireball', 'assets/sprites/fireball.png');
+		this.load.image('powerup', 'assets/sprites/powerup.png');
 		this.load.image('book', 'assets/sprites/book.png');
 
 		this.load.image('mathclass', 'assets/maps/mathclassroom.png');
