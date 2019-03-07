@@ -185,7 +185,7 @@ window.onload = function() {
 
         if(this.param1 == "North1" && carNorth1.body.velocity.y < 0)
         {
-            carNorth1.body.velocity.setTo(0,-15);
+            carNorth1.body.velocity.setTo(0,0);
         }
         else if(this.param1 == "North1" && carNorth1.body.velocity.y == 0)
         {
@@ -193,7 +193,7 @@ window.onload = function() {
         }
         else if(this.param1 == "South1" && carSouth1.body.velocity.y > 0)
         {
-            carSouth1.body.velocity.setTo(0,15);
+            carSouth1.body.velocity.setTo(0,0);
         }
         else if(this.param1 == "South1" && carSouth1.body.velocity.y == 0)
         {
@@ -218,7 +218,7 @@ window.onload = function() {
 
         if(this.param1 == "North2" && carNorth2.body.velocity.y < 0)
         {
-            carNorth2.body.velocity.setTo(0,-5);
+            carNorth2.body.velocity.setTo(0,0);
         }
         else if(this.param1 == "North2" && carNorth2.body.velocity.y == 0)
         {
@@ -226,7 +226,7 @@ window.onload = function() {
         }
         else if(this.param1 == "South2" && carSouth2.body.velocity.y > 0)
         {
-            carSouth2.body.velocity.setTo(0,5);
+            carSouth2.body.velocity.setTo(0,0);
         }
         else if(this.param1 == "South2" && carSouth2.body.velocity.y == 0)
         {
