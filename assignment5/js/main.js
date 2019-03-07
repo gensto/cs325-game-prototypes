@@ -19,6 +19,9 @@ window.onload = function() {
         game.load.image('policeSouth', 'assets/cars/policeSouth.png');
         game.load.image('policeEast', 'assets/cars/policeEast.png');
         game.load.image('policeWest', 'assets/cars/policeWest.png');
+
+        game.load.audio('brakeSound', 'assets/sounds/brakeSound.mp3');
+        game.load.audio('crashSound', 'assets/sounds/crashSound.mp3');
     }
     
     var background = null;
@@ -46,10 +49,16 @@ window.onload = function() {
     var westStop;
     var eastStop;
 
+    var brakeSound;
+    var crashSound;
+
     var totalScore = 0;
 
     
     function create() {
+
+    	brakeSound = game.add.audio('brakeSound');
+    	crashSound = game.add.audio('crashSound');
 
         northStop = game.input.keyboard.addKey(Phaser.Keyboard.UP);
         southStop = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
@@ -186,6 +195,7 @@ window.onload = function() {
         if(this.param1 == "North1" && carNorth1.body.velocity.y < 0)
         {
             carNorth1.body.velocity.setTo(0,0);
+            brakeSound.play();
         }
         else if(this.param1 == "North1" && carNorth1.body.velocity.y == 0)
         {
@@ -194,6 +204,7 @@ window.onload = function() {
         else if(this.param1 == "South1" && carSouth1.body.velocity.y > 0)
         {
             carSouth1.body.velocity.setTo(0,0);
+            brakeSound.play();
         }
         else if(this.param1 == "South1" && carSouth1.body.velocity.y == 0)
         {
@@ -202,6 +213,7 @@ window.onload = function() {
         else if(this.param1 == "West1" && carWest1.body.velocity.x < 0)
         {
             carWest1.body.velocity.setTo(0,0);
+            brakeSound.play();
         }
         else if(this.param1 == "West1" && carWest1.body.velocity.x == 0)
         {
@@ -210,6 +222,7 @@ window.onload = function() {
         else if(this.param1 == "East1" && carEast1.body.velocity.x > 0)
         {
             carEast1.body.velocity.setTo(0,0);
+            brakeSound.play();
         }
         else if(this.param1 == "East1" && carEast1.body.velocity.x == 0)
         {
@@ -219,6 +232,7 @@ window.onload = function() {
         if(this.param1 == "North2" && carNorth2.body.velocity.y < 0)
         {
             carNorth2.body.velocity.setTo(0,0);
+            brakeSound.play();
         }
         else if(this.param1 == "North2" && carNorth2.body.velocity.y == 0)
         {
@@ -227,6 +241,7 @@ window.onload = function() {
         else if(this.param1 == "South2" && carSouth2.body.velocity.y > 0)
         {
             carSouth2.body.velocity.setTo(0,0);
+            brakeSound.play();
         }
         else if(this.param1 == "South2" && carSouth2.body.velocity.y == 0)
         {
@@ -235,6 +250,7 @@ window.onload = function() {
         else if(this.param1 == "West2" && carWest2.body.velocity.x < 0)
         {
             carWest2.body.velocity.setTo(0,0);
+            brakeSound.play();
         }
         else if(this.param1 == "West2" && carWest2.body.velocity.x == 0)
         {
@@ -243,6 +259,7 @@ window.onload = function() {
         else if(this.param1 == "East2" && carEast2.body.velocity.x > 0)
         {
             carEast2.body.velocity.setTo(0,0);
+            brakeSound.play();
         }
         else if(this.param1 == "East2" && carEast2.body.velocity.x == 0)
         {
@@ -380,6 +397,7 @@ window.onload = function() {
 
     function collisionHandler(){
 
+    		crashSound.play()
             gameOver = true;
     }
 
